@@ -27,6 +27,16 @@ const validateAccessToken = async (req, res, next) => {
         return;
     }
 
+    // to check if the access token present is valid or not 
+    const expiry = new Date(user.tokens.accessToken.expireAt);
+    if(expiry < new Date()) {
+        res.status(422).json({
+          success: false,
+          message: "Token Expired!",
+        });
+        return;
+      }
+
     req.user = user
     next()
 }

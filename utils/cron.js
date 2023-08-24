@@ -26,25 +26,41 @@ const isWebsiteActive = async (url) => {
     return true;
 }
 
-cron.schedule("0 */1 * * *", async () => {
-    const allWebsite = websiteModel.find({}).populate({
-        path: "userId",
-        select: ["name", "email"],
-      })
 
-    if(!allWebsite.length){
-        return ;
-    }
+const scheduleWebsiteStatusCheck = () => {
+    cron.schedule("*/1 * * * *", async () => {
+        try {
+            console.log("Cron start");
+            const allWebsites = await websiteModel.find({}).populate({
+                path: "userId",
+                select: ["name", "email"],
+            });
 
-    for(let i = 0; i < allWebsite.length; i++){
-        const website = allWebsite[i]
-        const url = website.url
-        const isActive = isWebsiteActive(url)
-        websiteModel.updateOne({_id: website.id}, {isActive})
-        if(!isActive){
-            transport.sendMail({
+            for (const website of allWebsites) {
+                const url = website.url;
+                const isActive = await isWebsiteActive(url);
                 
-            })
+                // Update website's isActive status in the database
+                await websiteModel.updateOne({ _id: website.id }, { isActive });
+
+                console.log("checking website", website.url);
+
+                if (!isActive && website.isActive) {
+                    // Send email notification
+                    transport.sendMail({
+                        from: process.env.EMAIL,
+                        to: website.userId.email,
+                        subject: "Your website is down!",
+                        html: `The website - <b>${website.url}</b> is down. Detected while we were doing our routine check on ${new Date().toLocaleString("en-in")}`,
+                    });
+                }
+            }
+        } catch (error) {
+            console.error("Error:", error);
         }
-    }
-})
+    });
+};
+
+
+
+module.exports = scheduleWebsiteStatusCheck
