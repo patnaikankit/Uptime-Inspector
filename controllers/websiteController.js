@@ -12,9 +12,13 @@ function validateUrl(value) {
   }
 
 
+// logic to add a website for checking
+// while adding websites, only functional and real websites can be added
+// websites which do not exist cannot be added 
 const addWebsiteController = async (req, res) => {
     const { url } = req.body
 
+    // if provided url does not exist
     if(!url){
         res.stats(400).json({
             success: false,
@@ -23,6 +27,7 @@ const addWebsiteController = async (req, res) => {
         return ;
     }
 
+    // checking the url format
     const validUrl = validateUrl(url)
     if(!validUrl){
         res.status(422).json({
@@ -34,6 +39,8 @@ const addWebsiteController = async (req, res) => {
 
     const user = req.user
 
+    // here we are checking whether the website is a real website or not
+    // a website which is real but is not functional at the time of adding will not be accepted
     const response = await axios.get(url).catch((err) => void err)
     if(!response || response.status !== 200){
         res.status(422).json({
@@ -43,6 +50,7 @@ const addWebsiteController = async (req, res) => {
         return ;
     }
 
+    // once the website passes all checks it will be initially given a isActive flag as true and all further downtime and backup will be updated and stored during the routine checks
     const website = new websiteModel({
         url,
         userId: user._id,
@@ -67,7 +75,7 @@ const addWebsiteController = async (req, res) => {
 }
 
 
-
+// the logic to delete a website
 const deleteWebsiteController = async (req, res) => {
     const id = req.params.webId
 
@@ -89,13 +97,14 @@ const deleteWebsiteController = async (req, res) => {
         .catch((err) => {
             res.status(500).json({
                 success: false,
-                message: "Error while deleting new website!",
+                message: "Error while deleting website!",
                 error: err
             })
         })
 }
 
 
+// the logic to retrive all you stored websites
 const getAllWebsiteController = async (req, res) => {
     const respone = await websiteModel.find({userId: req.user._id}).populate({
         path: "userId",

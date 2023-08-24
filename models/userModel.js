@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    // will store the access and the refresh tokens
+    // access token gets updated after every time the user does login using the refresh token - after the access token expires
     tokens: {
         accessToken: {
             token: String,

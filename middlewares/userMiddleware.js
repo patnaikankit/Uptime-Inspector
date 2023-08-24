@@ -19,6 +19,7 @@ const validateAccessToken = async (req, res, next) => {
         "tokens.accessToken.token": headerToken
     })
 
+    // to check if an user actually exists using the provided token
     if(!user){
         res.status(422).json({
             success: false,
@@ -27,7 +28,8 @@ const validateAccessToken = async (req, res, next) => {
         return;
     }
 
-    // to check if the access token present is valid or not 
+    // to check if the access token present is valid or not - to check whether it has expired or not
+    // if expired login using the refresh token
     const expiry = new Date(user.tokens.accessToken.expireAt);
     if(expiry < new Date()) {
         res.status(422).json({

@@ -2,8 +2,11 @@ const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken")
 
+
+// token generation
 const generateToken = (data, exp) => {
-    if (!exp){
+    // default expiration of access token - 1day
+    if(!exp){
         exp = Date.now()/1000 + 24*60*60;
     }
 
@@ -14,6 +17,8 @@ const generateToken = (data, exp) => {
     return token;
 }
 
+
+// if an access token alredy exists then it is checked whether it is valid or not
 const decodeToken = (token) => {
     let data;
     try{
@@ -26,6 +31,7 @@ const decodeToken = (token) => {
 }
 
 
+// generating a new access token for users if the current has expired using refresh token 
 const generateAccesstoken = async(req, res) => {
     const { refreshToken } = req.body;
     if(!refreshToken){
@@ -40,6 +46,7 @@ const generateAccesstoken = async(req, res) => {
       const user = await userModel.findOne({
         "tokens.refreshToken.token": refreshToken,
       });
+
       if (!user) {
         res.status(422).json({
           status: false,
@@ -80,6 +87,7 @@ const generateAccesstoken = async(req, res) => {
 }
 
 
+// the logic to register a new user
 const registerController = async (req, res) => {
     const { name, email, password } = req.body
 
@@ -112,7 +120,7 @@ const registerController = async (req, res) => {
         tokens: {
             refreshToken: {
                 token: refreshToken,
-                expireAt: new Date(refreshTokenExp * 1000)
+                expireAt: new Date(refreshTokenExp*1000)
             }
         }
     });
@@ -145,6 +153,7 @@ const registerController = async (req, res) => {
 }
 
 
+// the logic to login a user
 const loginController = async (req, res) => {
     const { name, email, password } = req.body
 
