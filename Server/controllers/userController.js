@@ -31,8 +31,8 @@ const decodeToken = (token) => {
 }
 
 
-// generating a new access token for users if the current has expired using refresh token 
-const generateAccesstoken = async(req, res) => {
+// generating a new access token for users if the current token has expired using refresh token 
+const generateAccesstoken = async (req, res) => {
     const { refreshToken } = req.body;
     if(!refreshToken){
         res.status(400).json({
@@ -63,6 +63,7 @@ const generateAccesstoken = async(req, res) => {
     }, accessTokenExp)
 
 
+    // saving the new access token in the db
     user.tokens.accessToken = {
         token: accessToken,
         expireAt: new Date(accessTokenExp*1000),
@@ -99,14 +100,17 @@ const registerController = async (req, res) => {
         return ;
     }
 
+    // securing the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // generating an access token - valid for 1 day
     const accessTokenExp = Date.now()/1000 + 24*60*60;
     const accessToken = generateToken({
         email,
         name
     }, accessTokenExp)
     
+    // generating a refresh token - valid for 5 days
     const refreshTokenExp = Date.now()/1000 + 5*24*60*60;
     const refreshToken = generateToken({
         email,
@@ -153,9 +157,9 @@ const registerController = async (req, res) => {
 }
 
 
-// the logic to login a user
+// the logic to login a new user
 const loginController = async (req, res) => {
-    const { name, email, password } = req.body
+    const { email, password } = req.body
 
     if(!email || !password){
         res.status(400).json({
@@ -181,7 +185,7 @@ const loginController = async (req, res) => {
    if(!passwordCheck){
     res.status(422).json({
         success: false,
-        message: "User Credentials doesn't Exist!"
+        message: "User Credentials don't match!"
      })
      return;
    }
