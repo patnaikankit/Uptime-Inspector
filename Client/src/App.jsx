@@ -1,5 +1,5 @@
 import React from "react"
-import { Auth } from "./components/auth"
+import { Auth } from "./components/Auth/auth"
 
 function App() {
   return (

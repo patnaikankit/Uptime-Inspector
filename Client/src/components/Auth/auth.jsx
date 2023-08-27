@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./auth.css"
 
 export const Auth = () => {
-    const [signupActive, setSignupActive] = useState()
+  // State change
+  // to switch between signup and login page
+    const [signupActive, setSignupActive] = useState(false)
     const [data, setData] = useState({
         name: "",
         email: "",
         password: ""
     })
     const [errorMsg, setErrorMsg] = useState("")
+    // to disable the login/signup button once the request has been sent so that it can be proccesed properly
     const [buttonDisable, setButtonDisable] = useState(false)
-
-
+    
+    
+    // Functions
+    // to validate the email format
     const validateEmail = (email) => {
         return String(email)
           .toLowerCase()
@@ -21,18 +26,22 @@ export const Auth = () => {
           );
       };
 
-
-
+      // signup frontend logic
     const handleSignup = async () => {
         if(buttonDisable){
             return ;
         }
 
-
-        if(!data.name.trim() || !data.email.trim() || !data.password){
-            setErrorMsg("All Fields are Required!")
-            return ;
+        if (!data || typeof data.name !== 'string' || typeof data.email !== 'string' || typeof data.password !== 'string') {
+          setErrorMsg("All Fields are Required!");
+          return;
         }
+      
+        if (!data.name.trim() || !data.email.trim() || !data.password) {
+            setErrorMsg("All Fields are Required!");
+            return;
+        }
+      
 
         if(!validateEmail(data.email)){
             setErrorMsg("Invalid Email Format!")
@@ -45,6 +54,7 @@ export const Auth = () => {
         }
         setErrorMsg("")
 
+        // if all the above checks are passed then disable the button and wait for the response
         setButtonDisable(true)
         const response = await fetch("http://localhost:3000/api/v1/user/signup", {
             method: "POST",
@@ -68,18 +78,81 @@ export const Auth = () => {
 
         const result = await response.json()
 
-        if(!data.status){
-            setErrorMsg(data.message)
+        if(!result.status){
+            setErrorMsg(result.message)
             return ;
         }
 
-        console.log(result);
+        const tokens = result.data.tokens
+
+        localStorage.setItem("tokens", JSON.stringify(tokens));
+
+        window.localStorage.reload()
     }
 
 
     const handleLogin = async () => {
-
+      if(buttonDisable){
+        return ;
     }
+
+    if(!data.email.trim() || !data.password){
+        setErrorMsg("All Fields are Required!")
+        return ;
+    }
+
+    if(!validateEmail(data.email)){
+        setErrorMsg("Invalid Email Format!")
+        return ;
+    }
+
+    if(data.password.length < 6){
+        setErrorMsg("Password must of atleast 6 characters")
+        return ;
+    }
+    setErrorMsg("")
+
+
+    // if all the above checks are passed then disable the button and wait for the response
+    setButtonDisable(true)
+    const response = await fetch("http://localhost:3000/api/v1/user/login", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json"
+        },
+        body: JSON.stringify({
+            email: data.email,
+            password: data.password
+        })
+    }).catch((err) => {
+        setErrorMsg("Error while login -> ", err.message)
+    })
+
+    setButtonDisable(false)
+
+    if(!response){
+        setErrorMsg("Error while login!")
+    }
+
+    const result = await response.json()
+
+    if(!result.status){
+        setErrorMsg(result.message)
+        return ;
+    }
+
+    const tokens = result.data.tokens
+
+    localStorage.setItem("tokens", JSON.stringify(tokens));
+
+    // window.localStorage.reload()
+    }
+
+
+    useEffect(() => {
+      setData({});
+    }, [signupActive]);
+
 
     const signup = (
         <div className="box signup">
@@ -159,7 +232,11 @@ export const Auth = () => {
         />
       </div>
 
-      <button>Login</button>
+      {errorMsg && <p className="error">{errorMsg}</p>}
+
+      <button onClick={handleLogin} disabled={buttonDisable}>
+        {buttonDisable ? "Logging in..." : "Login"}
+      </button>
 
       <p className="bottom-text">
         New User? {" "}
