@@ -16,8 +16,7 @@ function App() {
 
   const website = async () => {
     const rawTokens = localStorage.getItem("tokens");
-    if (!rawTokens) {
-      console.log("enter");
+    if(!rawTokens){
       setShowAuth(true);
       setPageLoaded(true);
       return;
@@ -64,6 +63,8 @@ function App() {
         setLoadingWebsites(true);
         setPageLoaded(true);
       }
+
+      fetchAllWebsites();
     };
 
 
@@ -71,8 +72,6 @@ function App() {
       const rawToken = localStorage.getItem("tokens");
       const tokens = JSON.parse(rawToken);
       const accessToken = tokens?.accessToken?.token;
-
-      console.log(accessToken);
   
       const res = await fetch("http://localhost:4000/api/v1/website", {
         headers: {
@@ -80,19 +79,19 @@ function App() {
         },
       }).catch((err) => void err);
       setLoadingWebsites(false);
-      if (!res) {
+      if(!res){
         return;
       }
   
       const data = await res.json();
-
-      console.log(data);
   
       setWebsites(data.data);
     };
   
     const addWebsite = async () => {
-      if (!inputUrl.trim() || submitButtonDisabled) return;
+      if (!inputUrl.trim() || submitButtonDisabled){
+        return;
+      } 
       setErrorMsg("");
   
       const rawToken = localStorage.getItem("tokens");
@@ -112,24 +111,26 @@ function App() {
       }).catch((err) => void err);
       setSubmitButtonDisabled(false);
   
-      if (!res) {
+      if(!res){
         setErrorMsg("Error creating website");
         return;
       }
       const data = await res.json();
   
-      if (!data.status) {
+      if(!data.status){
         setErrorMsg(data.message);
         return;
       }
   
-      setInputUrl("")
+      setInputUrl("");
   
       fetchAllWebsites();
     };
   
     const deleteWebsite = async (id) => {
-      if (deletingWebsite) return;
+      if(deletingWebsite){
+        return;
+      } 
   
       const rawToken = localStorage.getItem("tokens");
       const tokens = JSON.parse(rawToken);

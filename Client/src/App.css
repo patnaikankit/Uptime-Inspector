@@ -27,7 +27,8 @@
     display: flex;
     flex-direction: column;
     gap: 25px;
-    background-color: #43e543d2;
+    background-color: #006ad4d2;
+    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
   }
   
   .app-header {
@@ -37,6 +38,7 @@
     gap: 15px;
     border-radius: 10px;
     background-color: white;
+    box-shadow: 20px 20px 20px 20px rgba(0, 0, 0, 0.1);
   }
   
   button {
@@ -47,9 +49,13 @@
     font-weight: 500;
     cursor: pointer;
     border: none;
-    background-color: #48d10e;
+    background-color: #191dff;
     color: white;
     border-radius: 5px;
+  }
+
+  button:hover {
+    background-color: #0003a8;
   }
   
   .body {
@@ -96,7 +102,7 @@
   
   .card .link {
     cursor: pointer;
-    color: #6f17ea;
+    color: #0003a8;
     font-weight: 600;
     line-height: 18px;
     font-size: 14px;
