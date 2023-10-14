@@ -125,6 +125,10 @@ const registerController = async (req, res) => {
             refreshToken: {
                 token: refreshToken,
                 expireAt: new Date(refreshTokenExp*1000)
+            },
+            accessToken: {
+                token: accessToken,
+                expireAt: new Date(accessTokenExp*1000)
             }
         }
     });

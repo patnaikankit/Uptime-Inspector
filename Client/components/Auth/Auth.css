@@ -1,0 +1,100 @@
+.container {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    background-color: #43e543d2;
+  }
+
+  
+  .box {
+    width: 400px;
+    max-width: 100%;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+  }
+  
+  .elem {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .elem label {
+    font-size: 16px;
+    font-size: 500;
+    line-height: 22px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 8px 16px;
+    outline: none;
+    border: none;
+    background-color: white;
+    font-size: 16px;
+    line-height: 18px;
+    border: 1px solid gray;
+    transition: 200ms;
+    border-radius: 5px;
+  }
+  
+  .input::placeholder {
+    color: #00000088;
+  }
+  
+  .input:focus {
+    border: 1px solid #17ea1787;
+  }
+  
+  .heading {
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 32px;
+  }
+  
+  .bottom-text {
+    text-align: center;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  
+  .bottom-text span {
+    font-weight: bold;
+    color: #48d10e;
+    cursor: pointer;
+  }
+  
+  .error {
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    color: #ef3a3a;
+  }
+  
+  .box button {
+    padding: 12px 24px;
+    width: 100%;
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background-color: #48d10e;
+    color: white;
+    border-radius: 5px;
+  }
+
+  .box button:hover {
+    background-color: #2d9401
+  }
+  
