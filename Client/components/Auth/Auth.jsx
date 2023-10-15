@@ -3,7 +3,8 @@ import './Auth.css'
 
 export function Auth(){
 
-    // State Change
+    // State change
+    // to switch between signup and login page
     const [signupActive, setSignupActive] = useState()
     const [values, setValues] = useState({
         name: "",
@@ -11,10 +12,12 @@ export function Auth(){
         pass: "",
       });
     const [errorMsg, setErrorMsg] = useState("");
+    // to disable the login/signup button once the request has been sent so that it can be proccesed properly
     const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
 
 
-    // functions
+    // Functions
+    // to validate the email format
     const validateEmail = (email) => {
         return String(email)
           .toLowerCase()
@@ -24,6 +27,7 @@ export function Auth(){
       };
 
 
+    // signup frontend logic  
     const handleSignup = async () => {
         if(submitButtonDisabled){
             return;
@@ -46,6 +50,7 @@ export function Auth(){
 
         setErrorMsg("")
 
+        // if all the above checks are passed then disable the button and wait for the response
         setSubmitButtonDisabled(true)
         const response = await fetch("http://localhost:4000/api/v1/user/signup", {
             method: "POST",
@@ -76,8 +81,13 @@ export function Auth(){
 
         const tokens = data.data.tokens;
 
+        // Store access token in localStorage
         localStorage.setItem("tokens", JSON.stringify(tokens));
 
+        // You can also store the token in a state if needed
+        // setAccessToken(tokens.accessToken);
+
+        // Reload the window (you might want to replace this with a more elegant state update)
         window.location.reload()
     }
 
@@ -104,6 +114,7 @@ export function Auth(){
 
         setErrorMsg("")
 
+        // if all the above checks are passed then disable the button and wait for the response
         setSubmitButtonDisabled(true)
         const response = await fetch("http://localhost:4000/api/v1/user/login", {
             method: "POST",
@@ -133,8 +144,13 @@ export function Auth(){
 
         const tokens = data.data.tokens;
 
+        // Store access token in localStorage
         localStorage.setItem("tokens", JSON.stringify(tokens));
 
+        // You can also store the token in a state if needed
+        // setAccessToken(tokens.accessToken);
+
+        // Reload the window (you might want to replace this with a more elegant state update)
         window.location.reload()
     }
 

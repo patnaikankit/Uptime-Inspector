@@ -4,16 +4,25 @@ import { Auth } from '../components/Auth/Auth.jsx'
 
 function App() {
   // State Change
+  // to set it true between request response intermediate time
   const [pageLoaded, setPageLoaded] = useState(false);
+  // common file for the home and main page so depending whether the user is authticated or not show the login or main page
   const [showAuth, setShowAuth] = useState(true);
+  // to store the websites added by the user
   const [websites, setWebsites] = useState([]);
   const [loadingWebsites, setLoadingWebsites] = useState(true);
+  // to store the url passed by the user 
   const [inputUrl, setInputUrl] = useState("");
+  // to disable the add button once the request has been sent so that it can be proccesed properly
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [deletingWebsite, setDeletingWebsite] = useState("");
 
 
+  // Functions
+  // this function checks whether the user is authenticated or not
+  // we will also check at each stage whether the user is authenticated to perform a particular action or not 
+  // authentication will be done in each subsequent function before the particular action is performed
   const website = async () => {
     const rawTokens = localStorage.getItem("tokens");
     if(!rawTokens){
@@ -68,6 +77,7 @@ function App() {
     };
 
 
+    // to show all stored websites
     const fetchAllWebsites = async () => {
       const rawToken = localStorage.getItem("tokens");
       const tokens = JSON.parse(rawToken);
@@ -88,6 +98,7 @@ function App() {
       setWebsites(data.data);
     };
   
+    // to add a new website
     const addWebsite = async () => {
       if (!inputUrl.trim() || submitButtonDisabled){
         return;
@@ -127,6 +138,8 @@ function App() {
       fetchAllWebsites();
     };
   
+
+    // to delete a existing website
     const deleteWebsite = async (id) => {
       if(deletingWebsite){
         return;
@@ -137,6 +150,7 @@ function App() {
       const accessToken = tokens.accessToken.token;
   
       setDeletingWebsite(id);
+      // we have to pass the unique id associated with each webiste to delete it
       const response = await fetch(`http://localhost:4000/api/v1/website/delete-website/${id}`, {
         method: "DELETE",
         headers: {
@@ -172,7 +186,7 @@ function App() {
                 <label>Enter Website URL</label>
                 <input
                   className="input"
-                  placeholder="https://google.com"
+                  placeholder="https://www.google.com"
                   value={inputUrl}
                   onChange={(event) => setInputUrl(event.target.value)}
                 />
