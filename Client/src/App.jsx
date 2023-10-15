@@ -35,7 +35,7 @@ function App() {
     const accessToken = tokens.accessToken;
     const aExpiry = new Date(accessToken.expireAt);
     if(new Date() > aExpiry){
-      const response = await fetch("http://localhost:4000/api/v1/user/new-token", {
+      const response = await fetch("https://uptime-inspector.onrender.com/api/v1/user/new-token", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -83,7 +83,7 @@ function App() {
       const tokens = JSON.parse(rawToken);
       const accessToken = tokens?.accessToken?.token;
   
-      const response = await fetch("http://localhost:4000/api/v1/website", {
+      const response = await fetch("https://uptime-inspector.onrender.com/api/v1/website", {
         headers: {
           Authorization: accessToken,
         },
@@ -110,7 +110,7 @@ function App() {
       const accessToken = tokens.accessToken.token;
   
       setSubmitButtonDisabled(true);
-      const response = await fetch("http://localhost:4000/api/v1/website/create-website", {
+      const response = await fetch("https://uptime-inspector.onrender.com/api/v1/website/create-website", {
         method: "POST",
         headers: {
           Authorization: accessToken,
@@ -151,7 +151,7 @@ function App() {
   
       setDeletingWebsite(id);
       // we have to pass the unique id associated with each webiste to delete it
-      const response = await fetch(`http://localhost:4000/api/v1/website/delete-website/${id}`, {
+      const response = await fetch(`https://uptime-inspector.onrender.com/api/v1/website/delete-website/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: accessToken,

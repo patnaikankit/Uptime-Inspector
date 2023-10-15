@@ -52,7 +52,7 @@ export function Auth(){
 
         // if all the above checks are passed then disable the button and wait for the response
         setSubmitButtonDisabled(true)
-        const response = await fetch("http://localhost:4000/api/v1/user/signup", {
+        const response = await fetch("https://uptime-inspector.onrender.com/api/v1/user/signup", {
             method: "POST",
             headers: {
               "content-type": "application/json",
@@ -116,7 +116,7 @@ export function Auth(){
 
         // if all the above checks are passed then disable the button and wait for the response
         setSubmitButtonDisabled(true)
-        const response = await fetch("http://localhost:4000/api/v1/user/login", {
+        const response = await fetch("https://uptime-inspector.onrender.com/api/v1/user/login", {
             method: "POST",
             headers: {
               "content-type": "application/json",
