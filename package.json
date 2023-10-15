@@ -1,0 +1,25 @@
+{
+  "name": "uptime-inspector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "Client": "cd Client && npm run dev",
+    "Server": "cd Server && nodemon server.js",
+    "start": "concurrently \"npm run Client\" \"npm run Server\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patnaikankit/Uptime-Inspector.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patnaikankit/Uptime-Inspector/issues"
+  },
+  "homepage": "https://github.com/patnaikankit/Uptime-Inspector#readme",
+  "dependencies": {
+    "concurrently": "^8.2.1"
+  }
+}

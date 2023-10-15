@@ -73,17 +73,17 @@ function App() {
       const tokens = JSON.parse(rawToken);
       const accessToken = tokens?.accessToken?.token;
   
-      const res = await fetch("http://localhost:4000/api/v1/website", {
+      const response = await fetch("http://localhost:4000/api/v1/website", {
         headers: {
           Authorization: accessToken,
         },
       }).catch((err) => void err);
       setLoadingWebsites(false);
-      if(!res){
+      if(!response){
         return;
       }
   
-      const data = await res.json();
+      const data = await response.json();
   
       setWebsites(data.data);
     };
@@ -99,7 +99,7 @@ function App() {
       const accessToken = tokens.accessToken.token;
   
       setSubmitButtonDisabled(true);
-      const res = await fetch("http://localhost:4000/api/v1/website/create-website", {
+      const response = await fetch("http://localhost:4000/api/v1/website/create-website", {
         method: "POST",
         headers: {
           Authorization: accessToken,
@@ -111,11 +111,11 @@ function App() {
       }).catch((err) => void err);
       setSubmitButtonDisabled(false);
   
-      if(!res){
+      if(!response){
         setErrorMsg("Error creating website");
         return;
       }
-      const data = await res.json();
+      const data = await response.json();
   
       if(!data.status){
         setErrorMsg(data.message);
@@ -137,7 +137,7 @@ function App() {
       const accessToken = tokens.accessToken.token;
   
       setDeletingWebsite(id);
-      const res = await fetch(`http://localhost:4000/api/v1/website/delete-website/${id}`, {
+      const response = await fetch(`http://localhost:4000/api/v1/website/delete-website/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: accessToken,
@@ -145,7 +145,9 @@ function App() {
       }).catch((err) => void err);
       setDeletingWebsite("");
   
-      if (!res) return;
+      if(!response){
+        return;
+      }
   
       fetchAllWebsites();
     };
