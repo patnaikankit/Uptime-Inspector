@@ -173,32 +173,41 @@ const loginController = async (req, res) => {
         return ;
     }
 
-   const user = await userModel.findOne({email});
+    try {
+        const user = await userModel.findOne({email});
 
-   if(!user){
-     res.status(422).json({
-        success: false,
-        message: "Invalid Email!"
-     })
-     return;
-   }
+        if(!user){
+            res.status(422).json({
+                success: false,
+                message: "Invalid Email!"
+            })
+            return;
+        }
 
-   const userPassword = user.password
-   const passwordCheck = await bcrypt.compare(password, userPassword);
+        const userPassword = user.password
+        const passwordCheck = await bcrypt.compare(password, userPassword);
 
-   if(!passwordCheck){
-    res.status(422).json({
-        success: false,
-        message: "User Credentials don't match!"
-     })
-     return;
-   }
+        if(!passwordCheck){
+            res.status(422).json({
+                success: false,
+                message: "User Credentials don't match!"
+            })
+            return;
+        }
 
-   res.status(200).json({
-    success: true,
-    message: "Login Successful!",
-    data: user
-   });
+        res.status(200).json({
+            success: true,
+            message: "Login Successful!",
+            data: user
+        });
+    }
+    catch(error){
+        console.error("Error in operation:", error);
+        res.status(500).json({
+          success: false,
+          message: "Internal Server Error",
+        });
+    }
 }
 
 module.exports = {

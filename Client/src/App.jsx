@@ -136,6 +136,7 @@ function App() {
       setInputUrl("");
   
       fetchAllWebsites();
+      window.location.reload();
     };
   
 
